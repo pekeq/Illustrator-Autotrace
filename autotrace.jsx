@@ -1,8 +1,8 @@
 ﻿#target illustrator
 
 // オートトレースする元画像のサイズ
-var pageWidth = 800;
-var pageHeight = 600;
+var pageWidth = 1920;
+var pageHeight = 1080;
 
 // オートトレースする元画像の拡張子
 var targetPattern = '*.png';
@@ -12,6 +12,14 @@ var targetPattern = '*.png';
  */
 function basename(str) {
     return str.replace(/\.[A-Za-z0-9]+$/, '');
+}
+
+/**
+ * targetFileから拡張子を取り除いて.aiをくっつける
+ */
+function getSaveFile(targetFile) {
+    var saveFileName = basename(targetFile) + '.ai';
+    return new File(saveFileName);
 }
 
 /**
@@ -36,7 +44,7 @@ function myTrace(targetFile) {
         // カラーモード
         tracingMode = TracingModeType.TRACINGMODEBLACKANDWHITE;
         // しきい値
-        threshold = 150;
+        threshold = 128;
         // ぼかし
         preprocessBlur = 0;
         // 再サンプル
@@ -53,6 +61,9 @@ function myTrace(targetFile) {
         minArea = 0.1;
         // コーナー角度
         cornerAngle = 0;
+
+	// ホワイトを無視
+	ignoreWhite = true;
         
         ///// 表示
         // ラスタライズ
@@ -62,26 +73,18 @@ function myTrace(targetFile) {
 
         livePaintOutput = false;
     }
-    redraw();
+    //redraw();
 
     // ライブペイント
     myTrace.tracing.expandTracing();
     with (myTrace.tracing.tracingOptions) {
         livePaintOutput = true;
     }
-    redraw();
+    //redraw();
 
     // ファイル保存
     myDoc.saveAs(getSaveFile(targetFile));
     myDoc.close(SaveOptions.DONOTSAVECHANGES);
-}
-
-/**
- * targetFileから拡張子を取り除いて.aiをくっつける
- */
-function getSaveFile(targetFile) {
-    var saveFileName = basename(targetFile) + '.ai';
-    return new File(saveFileName);
 }
 
 /////
