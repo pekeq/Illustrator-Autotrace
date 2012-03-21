@@ -85,6 +85,11 @@ function myTrace(targetFile) {
     // ファイル保存
     myDoc.saveAs(getSaveFile(targetFile));
     myDoc.close(SaveOptions.DONOTSAVECHANGES);
+    
+    myDoc = null;
+    myFile = null;
+    myItem = null;
+    myTrace = null;
 }
 
 /////
